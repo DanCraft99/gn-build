@@ -210,7 +210,7 @@ def DetectVisualStudioPath(version_as_year):
     # https://blogs.msdn.microsoft.com/heaths/2016/09/15/changes-to-visual-studio-15-setup/
     # For now we use a hardcoded default with an environment variable override.
     root_path = r'C:\Program Files (x86)\Microsoft Visual Studio\2017'
-    for edition in ['Professional', 'Community']:
+    for edition in ['Professional', 'Community', 'BuildTools', 'Enterprise']:
       path = os.environ.get('vs2017_install', os.path.join(root_path, edition))
       if os.path.exists(path):
         return path
@@ -247,7 +247,8 @@ def SetupToolchain(version_as_year, vs_path, include_prefix, sdk_version=None, c
     env = _LoadToolchainEnv(vs_path, cpu, sdk_version)
     envs[cpu] = env
 
-    windows_sdk_paths[cpu] = os.path.realpath(env['WINDOWSSDKDIR'])
+    windows_sdk_paths[cpu] = os.path.realpath(env.get('WINDOWSSDKDIR',
+                             os.environ.get('WINDOWSSDKDIR', 'C:\\Program Files (x86)\\Windows Kits\\10')))
 
     for path in env['PATH'].split(os.pathsep):
       if os.path.exists(os.path.join(path, 'cl.exe')):
