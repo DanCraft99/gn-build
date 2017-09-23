@@ -137,19 +137,31 @@ config("winver") {
   ]
 }
 
+config("sdk_include") {
+  include_dirs = [
+    "$windows_sdk_path\\include\\$windows_sdk_version\\um",
+    "$windows_sdk_path\\include\\$windows_sdk_version\\ucrt",
+    "$windows_sdk_path\\include\\$windows_sdk_version\\shared",
+  ]
+}
+
 # Linker flags for Windows SDK setup, this is applied only to EXEs and DLLs.
 config("sdk_link") {
   if (current_cpu == "x64") {
     lib_dirs = [
-      "$windows_sdk_path\Lib\winv6.3\um\x64",
-      "$visual_studio_path\VC\lib\amd64",
-      "$visual_studio_path\VC\atlmfc\lib\amd64",
+      "$visual_studio_path\\VC\\lib\\amd64",
+      "$visual_studio_path\\VC\\atlmfc\\lib\\amd64",
+      "$windows_sdk_path\\Lib\\winv6.3\\um\\x64",
+      "$windows_sdk_path\\Lib\\$windows_sdk_version\\um\\x64",
+      "$windows_sdk_path\\Lib\\$windows_sdk_version\\ucrt\\x64",
     ]
   } else {
     lib_dirs = [
-      "$windows_sdk_path\Lib\winv6.3\um\x86",
-      "$visual_studio_path\VC\lib",
-      "$visual_studio_path\VC\atlmfc\lib",
+      "$visual_studio_path\VC\\lib",
+      "$visual_studio_path\\VC\atlmfc\\lib",
+      "$windows_sdk_path\\Lib\\winv6.3\\um\\x86",
+      "$windows_sdk_path\\Lib\\$windows_sdk_version\\um\\x86",
+      "$windows_sdk_path\\Lib\\$windows_sdk_version\\ucrt\\x86",
     ]
   }
 }
