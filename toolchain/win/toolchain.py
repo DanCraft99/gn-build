@@ -255,6 +255,16 @@ def SetupToolchain(version_as_year, vs_path, include_prefix, sdk_version=None, c
         bin_dirs[cpu] = os.path.realpath(path)
         break
 
+    windows_sdk_includes = [
+      windows_sdk_paths[cpu] + '\\Include\\' + sdk_version + '\\um',
+      windows_sdk_paths[cpu] + '\\Include\\' + sdk_version + '\\ucrt',
+      windows_sdk_paths[cpu] + '\\Include\\' + sdk_version + '\\shared',
+      windows_sdk_paths[cpu] + '\\Include\\' + sdk_version + '\\winrt',
+    ]
+    for sdk_include in windows_sdk_includes:
+      if (sdk_include not in env['INCLUDE']):
+        env['INCLUDE'] += sdk_include + ';'
+
     # The separator for INCLUDE here must match the one used in
     # _LoadToolchainEnv() above.
     include = [include_prefix + p for p in env['INCLUDE'].split(';') if p]
